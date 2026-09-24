@@ -1,19 +1,14 @@
-//
-//  ViewController.swift
-//  Counter
-//
-//  Created by Александр Шляхов on 21.09.2026.
-//
-
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
-    @IBOutlet weak var historyView: UIView!
-    @IBOutlet weak var counterValueLabel: UILabel!
-    @IBOutlet weak var historyTextView: UITextView!
+    // MARK: - IBOutlets
+    @IBOutlet private weak var historyView: UIView!
+    @IBOutlet private weak var counterValueLabel: UILabel!
+    @IBOutlet private weak var historyTextView: UITextView!
     
     
+    // MARK: - Properties
     private var counter: Int = 0
     
     private let formatter: DateFormatter = {
@@ -23,6 +18,7 @@ class ViewController: UIViewController {
     }()
     
     
+    // MARK: - Types
     private enum EventType {
         case plus
         case minus
@@ -30,10 +26,42 @@ class ViewController: UIViewController {
         case invalidDecrement
     }
     
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
+        configureUI()
+        updateCounterLabel()
+    }
+    
+    
+    // MARK: - Private Methods
+    private func updateCounterLabel() {
+        counterValueLabel.text = String(counter)
+    }
+    
+    private func updateHistory(event: EventType) {
+        let message: String
+        
+        switch event {
+        case .plus:
+            message = "значение изменено на +1\n"
+        case .minus:
+            message = "значение изменено на -1\n"
+        case .reset:
+            message = "значение сброшено\n"
+        case .invalidDecrement:
+            message = "попытка уменьшить значение счётчика ниже 0\n"
+        }
+        
+        let date = formatter.string(from: Date())
+        historyTextView.text += "\(date)\(message)"
+        scrollHistoryToBottom()
+        
+    }
+    
+    private func configureUI() {
         counterValueLabel.backgroundColor = .systemBackground
         counterValueLabel.layer.cornerRadius = 18
         counterValueLabel.clipsToBounds = true
@@ -43,20 +71,27 @@ class ViewController: UIViewController {
         historyView.clipsToBounds = true
         
         historyTextView.backgroundColor = .clear
-        
-        updateCounterLabel()
     }
     
-
-    @IBAction func plusButton(_ sender: Any) {
+    private func scrollHistoryToBottom() {
+        let range = NSRange(
+            location: historyTextView.text.count - 1,
+            length: 1
+        )
+        historyTextView.scrollRangeToVisible(range)
+    }
+    
+    
+    // MARK: - IBAction
+    @IBAction private func didTapPlusButton() {
         counter += 1
         updateCounterLabel()
         
         updateHistory(event: .plus)
     }
     
-    @IBAction func minusButton(_ sender: Any) {
-        if counter == 0 {
+    @IBAction private func didTapMinusButton() {
+        guard counter > 0  else {
             updateHistory(event: .invalidDecrement)
             return
         }
@@ -67,35 +102,15 @@ class ViewController: UIViewController {
         updateHistory(event: .minus)
     }
     
-    @IBAction func resetButton(_ sender: Any) {
+    @IBAction private func didTapResetButton() {
         counter = 0
         updateCounterLabel()
         
         updateHistory(event: .reset)
     }
     
-    @IBAction func clearHistoryButton(_ sender: Any) {
+    @IBAction private func didTapClearHistoryButton() {
         historyTextView.text = ""
-    }
-    
-    
-    private func updateCounterLabel() {
-        counterValueLabel.text = String(counter)
-    }
-    
-    private func updateHistory(event: EventType) {
-        let date = formatter.string(from: Date())
-        
-        switch event {
-        case .plus:
-            historyTextView.text += "\(date) значение изменено на +1\n"
-        case .minus:
-            historyTextView.text += "\(date) значение изменено на -1\n"
-        case .reset:
-            historyTextView.text += "\(date) значение сброшено\n"
-        case .invalidDecrement:
-            historyTextView.text += "\(date) попытка уменьшить значение счётчика ниже 0\n"
-        }
     }
 }
 

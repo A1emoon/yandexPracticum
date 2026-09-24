@@ -34,7 +34,7 @@
                                     <color key="baseForegroundColor" red="1" green="0.9882352941176471" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="plusButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="z57-mv-cDh"/>
+                                    <action selector="didTapPlusButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="bvK-tW-FJf"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5S9-lU-Dvv">
@@ -48,7 +48,7 @@
                                     <color key="baseForegroundColor" red="1" green="0.9882352941176471" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="minusButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6mr-At-3wy"/>
+                                    <action selector="didTapMinusButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="xIG-mn-JNr"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aah-N9-G6e">
@@ -62,7 +62,7 @@
                                     <color key="baseForegroundColor" red="1" green="0.9882352941176471" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="resetButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="t71-Ta-UxL"/>
+                                    <action selector="didTapResetButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="iCL-po-LF9"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l9P-p1-Fhw">
@@ -105,7 +105,7 @@
                                     <color key="baseForegroundColor" red="1" green="0.9882352941176471" blue="0.96862745098039216" alpha="1" colorSpace="calibratedRGB"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="clearHistoryButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="W5f-dz-gEA"/>
+                                    <action selector="didTapClearHistoryButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="IfV-Ln-jlf"/>
                                 </connections>
                             </button>
                         </subviews>
