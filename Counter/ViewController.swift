@@ -24,6 +24,19 @@ final class ViewController: UIViewController {
         case minus
         case reset
         case invalidDecrement
+        
+        var text: String {
+            switch self {
+            case .plus:
+                return "значение изменено на +1\n"
+            case .minus:
+                return "значение изменено на -1\n"
+            case .reset:
+                return "значение сброшено\n"
+            case .invalidDecrement:
+                return "попытка уменьшить значение счётчика ниже 0\n"
+            }
+        }
     }
     
     
@@ -42,21 +55,8 @@ final class ViewController: UIViewController {
     }
     
     private func updateHistory(event: EventType) {
-        let message: String
-        
-        switch event {
-        case .plus:
-            message = "значение изменено на +1\n"
-        case .minus:
-            message = "значение изменено на -1\n"
-        case .reset:
-            message = "значение сброшено\n"
-        case .invalidDecrement:
-            message = "попытка уменьшить значение счётчика ниже 0\n"
-        }
-        
         let date = formatter.string(from: Date())
-        historyTextView.text += "\(date)\(message)"
+        historyTextView.text += "\(date)\(event.text)"
         scrollHistoryToBottom()
         
     }
