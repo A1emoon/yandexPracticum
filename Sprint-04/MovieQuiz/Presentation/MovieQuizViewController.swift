@@ -70,22 +70,9 @@ final class MovieQuizViewController: UIViewController {
     ]
     
     // MARK: - Types
-    private struct QuizStepViewModel {
-        let image: UIImage
-        let question: String
-        let questionNumber: String
-    }
-    
-    private struct QuizResultsViewModel {
-        let title: String
-        let text: String
-        let buttonText: String
-    }
-    
-    private struct QuizQuestion {
-        let imageName: String
-        let text: String
-        let correctAnswer: Bool
+    private enum Constants {
+        static let imageBorderWidth: CGFloat = 8
+        static let answerHighlightDuration: TimeInterval = 1
     }
     
     // MARK: - Lifecycle
@@ -99,23 +86,17 @@ final class MovieQuizViewController: UIViewController {
     
     // MARK: - IBActions
     @IBAction private func noButtonClicked() {
-        changeButtonState(enable: false)
-        
-        let currentAnswer = currentQuestion.correctAnswer
-        showAnswerResults(isCorrect: currentAnswer == false)
+        didAnswer(false)
     }
     
     @IBAction private func yesButtonClicked() {
-        changeButtonState(enable: false)
-        
-        let currentAnswer = currentQuestion.correctAnswer
-        showAnswerResults(isCorrect: currentAnswer == true)
+        didAnswer(true)
     }
     
     // MARK: - Private Methods
     private func configureUI() {
         imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 8
+        imageView.layer.borderWidth = Constants.imageBorderWidth
         imageView.layer.borderColor = nil
     }
     
@@ -132,7 +113,7 @@ final class MovieQuizViewController: UIViewController {
         imageView.image = step.image
         textLabel.text = step.question
         imageView.layer.borderColor = UIColor.clear.cgColor
-        changeButtonState(enable: true)
+        setButtonEnabled(true)
     }
     
     private func show(quiz result: QuizResultsViewModel) {
@@ -144,21 +125,15 @@ final class MovieQuizViewController: UIViewController {
         let action = UIAlertAction(
             title: result.buttonText,
             style: .default
-        ) { _ in
-            self.currentQuestionIndex = 0
-            self.correctAnswers = 0
-            
-            let firstQuestion = self.currentQuestion
-            let viewModel = self.convert(model: firstQuestion)
-            
-            self.show(quiz: viewModel)
+        ) { [weak self] _ in
+            self?.restartGame()
         }
         
         alert.addAction(action)
         
         self.present(alert, animated: true, completion: nil)
         
-        changeButtonState(enable: true)
+        setButtonEnabled(true)
     }
     
     private func showAnswerResults(isCorrect: Bool) {
@@ -167,8 +142,9 @@ final class MovieQuizViewController: UIViewController {
             correctAnswers += 1
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                self.showNextQuestionOrResults()
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.answerHighlightDuration) { [weak self] in
+            guard let self else { return }
+            self.showNextQuestionOrResults()
         }
     }
     
@@ -187,8 +163,25 @@ final class MovieQuizViewController: UIViewController {
         }
     }
     
-    private func changeButtonState(enable state: Bool) {
-        yesButton.isEnabled = state
-        noButton.isEnabled = state
+    private func didAnswer(_ answer: Bool) {
+        setButtonEnabled(false)
+        
+        let isCorrect = answer == currentQuestion.correctAnswer
+        showAnswerResults(isCorrect: isCorrect)
+    }
+    
+    private func setButtonEnabled(_ isEnabled: Bool) {
+        yesButton.isEnabled = isEnabled
+        noButton.isEnabled = isEnabled
+    }
+    
+    private func restartGame() {
+        currentQuestionIndex = 0
+        correctAnswers = 0
+        
+        let firstQuestion = currentQuestion
+        let viewModel = convert(model: firstQuestion)
+        
+        show(quiz: viewModel)
     }
 }
