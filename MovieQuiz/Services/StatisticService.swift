@@ -12,6 +12,10 @@ final class StatisticService {
         case totalCorrectAnswers
         case totalQuestionsAsked
     }
+    
+    private enum Constants {
+        static let percentageMultiplier = 100.0
+    }
 }
 
 extension StatisticService: StatisticServiceProtocol {
@@ -70,12 +74,10 @@ extension StatisticService: StatisticServiceProtocol {
         gamesCount += 1
         totalCorrectAnswers += result.correct
         totalQuestionsAsked += result.total
-        totalAccuracy = (Double(totalCorrectAnswers) / Double(totalQuestionsAsked)) * 100
+        totalAccuracy = (Double(totalCorrectAnswers) / Double(totalQuestionsAsked)) * Constants.percentageMultiplier
         
         if result.isBetterThan(bestGame) {
             bestGame = result
         }
     }
-    
-    
 }

@@ -100,14 +100,14 @@ final class MovieQuizViewController: UIViewController {
             statisticService.store(currentGame)
             
             let endGameAlert = AlertModel(
-                title:  "Этот раунд окончен!",
+                title:  String(localized: "round.finished.title"),
                 message: """
                     Ваш результат: \(correctAnswers)/\(questionAmount)
                     Количество сыгранных квизов: \(statisticService.gamesCount)
                     Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(Date().dateTimeString))
                     Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%
                     """,
-                buttonText: "Сыграть еще раз"
+                buttonText: String(localized: "round.finished.buttonText")
             ) { [weak self] in
                 self?.restartGame()
             }

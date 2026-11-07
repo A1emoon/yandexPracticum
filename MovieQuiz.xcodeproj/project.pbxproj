@@ -26,6 +26,7 @@
 		C86FE65A309897A2009BAB5A /* StatisticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86FE65930989799009BAB5A /* StatisticService.swift */; };
 		C8A27308307017D1004F814B /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C8A27305307017D1004F814B /* YS Display-Bold.ttf */; };
 		C8A27309307017D1004F814B /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C8A27306307017D1004F814B /* YS Display-Medium.ttf */; };
+		C8A7684F309F241E00786196 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = C8A7684E309F241E00786196 /* Localizable.xcstrings */; };
 		C8B622AB30932896004D2E96 /* QuestionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B622AA3093288C004D2E96 /* QuestionFactory.swift */; };
 		C8B622AD30933F9E004D2E96 /* QuestionFactoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B622AC30933F90004D2E96 /* QuestionFactoryProtocol.swift */; };
 /* End PBXBuildFile section */
@@ -52,6 +53,7 @@
 		C86FE65930989799009BAB5A /* StatisticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticService.swift; sourceTree = "<group>"; };
 		C8A27305307017D1004F814B /* YS Display-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Bold.ttf"; sourceTree = "<group>"; };
 		C8A27306307017D1004F814B /* YS Display-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YS Display-Medium.ttf"; sourceTree = "<group>"; };
+		C8A7684E309F241E00786196 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		C8B622AA3093288C004D2E96 /* QuestionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFactory.swift; sourceTree = "<group>"; };
 		C8B622AC30933F90004D2E96 /* QuestionFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFactoryProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,6 +109,7 @@
 				AD1ABABA2831907F00B3E448 /* Assets.xcassets */,
 				AD1ABABF2831907F00B3E448 /* Info.plist */,
 				C8A27307307017D1004F814B /* Fonts */,
+				C8A7684E309F241E00786196 /* Localizable.xcstrings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -203,6 +206,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = AD1ABAA52831907B00B3E448;
 			productRefGroup = AD1ABAAF2831907B00B3E448 /* Products */;
@@ -221,6 +225,7 @@
 			files = (
 				C8A27308307017D1004F814B /* YS Display-Bold.ttf in Resources */,
 				C8A27309307017D1004F814B /* YS Display-Medium.ttf in Resources */,
+				C8A7684F309F241E00786196 /* Localizable.xcstrings in Resources */,
 				AD1ABABE2831907F00B3E448 /* LaunchScreen.storyboard in Resources */,
 				AD1ABABB2831907F00B3E448 /* Assets.xcassets in Resources */,
 				AD1ABAB92831907B00B3E448 /* Main.storyboard in Resources */,
@@ -334,6 +339,7 @@
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -390,6 +396,7 @@
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
