@@ -1,75 +1,81 @@
+import Foundation
+
 final class QuestionFactory: QuestionFactoryProtocol {
-    weak var delegate: QuestionFactoryDelegate?
+    private let moviesLoader: MoviesLoading
+    private(set) weak var delegate: QuestionFactoryDelegate?
+    private var movies: [MostPopularMovie] = []
+    private var currentMovies: [MostPopularMovie] = []
     
-    //MARK: - Init
-    init(delegate: QuestionFactoryDelegate? = nil) {
+    private enum ComparisonDirection: String, CaseIterable {
+        case greaterThan = "больше"
+        case lessThan = "меньше"
+    }
+    
+    init(moviesLoader: MoviesLoading, delegate: QuestionFactoryDelegate? = nil) {
+        self.moviesLoader = moviesLoader
         self.delegate = delegate
     }
     
-    //MARK: - Private Properties
-    private let isFirstQuestion: Bool = true
-    
-    private let questions: [QuizQuestion] = [
-        QuizQuestion(
-            imageName: "The Godfather",
-            text: "Рейтинг этого фильма больше чем 6?",
-            correctAnswer: true
-        ),
-        QuizQuestion(
-            imageName: "The Dark Knight",
-            text: "Рейтинг этого фильма больше чем 6?",
-            correctAnswer: true
-        ),
-        QuizQuestion(
-            imageName: "Kill Bill",
-            text: "Рейтинг этого фильма больше чем 6?",
-            correctAnswer: true
-        ),
-        QuizQuestion(
-            imageName: "The Avengers",
-            text: "Рейтинг этого фильма больше чем 6?",
-            correctAnswer: true
-        ),
-        QuizQuestion(
-            imageName: "Deadpool",
-            text: "Рейтинг этого фильма больше чем 6?",
-            correctAnswer: true
-        ),
-        QuizQuestion(
-            imageName: "The Green Knight",
-            text: "Рейтинг этого фильма больше чем 6?",
-            correctAnswer: true
-        ),
-        QuizQuestion(
-            imageName: "Old",
-            text: "Рейтинг этого фильма больше чем 6?",
-            correctAnswer: false
-        ),
-        QuizQuestion(
-            imageName: "The Ice Age Adventures of Buck Wild",
-            text: "Рейтинг этого фильма больше чем 6?",
-            correctAnswer: false
-        ),
-        QuizQuestion(
-            imageName: "Tesla",
-            text: "Рейтинг этого фильма больше чем 6?",
-            correctAnswer: false
-        ),
-        QuizQuestion(
-            imageName: "Vivarium",
-            text: "Рейтинг этого фильма больше чем 6?",
-            correctAnswer: false
-        )
-    ]
-    
-    lazy private var currentQuestions = questions.shuffled()
-    
     //MARK: - Public Methods
-    func requestNextQuestion() {
-        if currentQuestions.isEmpty {
-            currentQuestions = questions.shuffled()
+    func loadData() {
+        moviesLoader.loadMovies { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .success(let mostPopularMovies):
+                    self.movies = mostPopularMovies.items
+                    self.delegate?.didLoadDataFromServer()
+                case .failure(let error):
+                    self.delegate?.didFailToLoadData(with: error)
+                }
+            }
         }
-        
-        delegate?.didReceiveNextQuestion(question: currentQuestions.popLast())
+    }
+    
+    func requestNextQuestion() {
+        DispatchQueue.global().async { [weak self] in
+            guard let self, !movies.isEmpty else { return }
+            
+            if currentMovies.isEmpty {
+                currentMovies = movies
+            }
+            
+            let index = (0..<self.currentMovies.count).randomElement() ?? 0
+            
+            let movie = self.currentMovies.remove(at: index)
+            
+            var imageData = Data()
+            
+            do {
+                imageData = try Data(contentsOf: movie.resizedImageURL)
+            } catch {
+                print("Failed to load image: \(error)")
+            }
+            
+            let randomRating = Float.random(in: 8...10)
+            let formattedRating = String(format: "%.1f", randomRating)
+            let comparisonDirection = ComparisonDirection.allCases.randomElement() ?? ComparisonDirection.greaterThan
+            let text = "Рейтинг этого фильма \(comparisonDirection.rawValue) чем \(formattedRating)?"
+            
+            var correctAnswer: Bool {
+                switch comparisonDirection{
+                case .greaterThan:
+                    return movie.rating > randomRating
+                case .lessThan:
+                    return movie.rating < randomRating
+                }
+            }
+            
+            let question = QuizQuestion(
+                imageData: imageData,
+                text: text,
+                correctAnswer: correctAnswer
+            )
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.didReceiveNextQuestion(question: question)
+            }
+        }
     }
 }

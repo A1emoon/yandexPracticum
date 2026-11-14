@@ -1,6 +1,39 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "error.network.buttonText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Попробовать еще раз"
+          }
+        }
+      }
+    },
+    "error.network.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Невозможно загрузить данные"
+          }
+        }
+      }
+    },
+    "error.network.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Что-то пошло не так("
+          }
+        }
+      }
+    },
     "round.finished.buttonText" : {
       "extractionState" : "manual",
       "localizations" : {

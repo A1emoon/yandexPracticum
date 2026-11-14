@@ -1,6 +1,6 @@
 import Foundation
 
-extension Array<QuizQuestion> {
+extension Array<MostPopularMovie> {
     subscript(safe index: Index) -> Element? {
         indices ~= index ? self[index] : nil
     }
