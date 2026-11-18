@@ -154,6 +154,15 @@ final class MovieQuizViewController: UIViewController {
             }
         alertPresenter.show(in: self, model: alertModel)
     }
+    
+    private func showLoadImageError() {
+        let alertModel = AlertModel(
+            title: String(localized: "error.network.title"),
+            message: String("error.network.loadImage"),
+            buttonText: String("error.network.loadImage.buttonText")) { [weak self] in
+                self?.questionFactory.requestNextQuestion()
+            }
+    }
 }
 
 // MARK: - Extensions
@@ -173,5 +182,9 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
     
     func didFailToLoadData(with error: Error) {
         showNetworkError(message: error.localizedDescription)
+    }
+    
+    func didFailToLoadImage() {
+        showLoadImageError()
     }
 }

@@ -11,6 +11,10 @@ final class QuestionFactory: QuestionFactoryProtocol {
         case lessThan = "меньше"
     }
     
+    private enum APIError: Error {
+        case errorMessage(String)
+    }
+    
     init(moviesLoader: MoviesLoading, delegate: QuestionFactoryDelegate? = nil) {
         self.moviesLoader = moviesLoader
         self.delegate = delegate
@@ -18,11 +22,14 @@ final class QuestionFactory: QuestionFactoryProtocol {
     
     //MARK: - Public Methods
     func loadData() {
-        moviesLoader.loadMovies { [weak self] result in
+        moviesLoader.loadMovies { result in
             DispatchQueue.main.async {
-                guard let self else { return }
                 switch result {
                 case .success(let mostPopularMovies):
+                    if let errorMessage = mostPopularMovies.errorMessage {
+                        self.delegate?.didFailToLoadData(with: APIError.errorMessage(errorMessage))
+                        return
+                    }
                     self.movies = mostPopularMovies.items
                     self.delegate?.didLoadDataFromServer()
                 case .failure(let error):
@@ -33,11 +40,11 @@ final class QuestionFactory: QuestionFactoryProtocol {
     }
     
     func requestNextQuestion() {
-        DispatchQueue.global().async { [weak self] in
-            guard let self, !movies.isEmpty else { return }
+        DispatchQueue.global().async {
+            guard !self.movies.isEmpty else { return }
             
-            if currentMovies.isEmpty {
-                currentMovies = movies
+            if self.currentMovies.isEmpty {
+                self.currentMovies = self.movies
             }
             
             let index = (0..<self.currentMovies.count).randomElement() ?? 0
@@ -49,7 +56,8 @@ final class QuestionFactory: QuestionFactoryProtocol {
             do {
                 imageData = try Data(contentsOf: movie.resizedImageURL)
             } catch {
-                print("Failed to load image: \(error)")
+                self.delegate?.didFailToLoadImage()
+                return
             }
             
             let randomRating = Float.random(in: 8...10)
@@ -72,8 +80,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
                 correctAnswer: correctAnswer
             )
             
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+            DispatchQueue.main.async {
                 self.delegate?.didReceiveNextQuestion(question: question)
             }
         }
