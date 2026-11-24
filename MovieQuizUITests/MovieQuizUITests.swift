@@ -60,19 +60,45 @@ final class MovieQuizUITests: XCTestCase {
     }
     
     func testResultsAlert() {
-        sleep(3)
-        
-        (1...10).forEach { _ in
-            app.buttons["Yes"].tap()
-            sleep(3)
+        let yesButton = app.buttons["Yes"]
+        let indexLabel = app.staticTexts["Index"]
+
+        XCTAssertTrue(indexLabel.waitForExistence(timeout: 10))
+
+        for questionNumber in 1...10 {
+            let currentQuestion = NSPredicate(
+                format: "label == %@",
+                "\(questionNumber)/10"
+            )
+
+            expectation(
+                for: currentQuestion,
+                evaluatedWith: indexLabel
+            )
+
+            waitForExpectations(timeout: 10)
+
+            XCTAssertTrue(yesButton.isEnabled)
+            yesButton.tap()
         }
+
         let alert = app.alerts.firstMatch
-        
-        XCTAssertTrue(alert.exists)
-        print("Alert title: [\(alert.title)]")
-        XCTAssertTrue(alert.staticTexts["Этот раунд окончен!"].exists)
-        XCTAssertTrue(alert.buttons.firstMatch.label == "Сыграть еще раз")
+
+        XCTAssertTrue(
+            alert.waitForExistence(timeout: 10),
+            "Итоговый alert не появился"
+        )
+
+        XCTAssertTrue(
+            alert.staticTexts["Этот раунд окончен!"].exists
+        )
+
+        XCTAssertEqual(
+            alert.buttons.firstMatch.label,
+            "Сыграть еще раз"
+        )
     }
+
     
     func testRestartGame() {
         sleep(3)
