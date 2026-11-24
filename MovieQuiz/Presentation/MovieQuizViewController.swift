@@ -162,6 +162,7 @@ final class MovieQuizViewController: UIViewController {
             buttonText: String("error.network.loadImage.buttonText")) { [weak self] in
                 self?.questionFactory.requestNextQuestion()
             }
+        alertPresenter.show(in: self, model: alertModel)
     }
 }
 
